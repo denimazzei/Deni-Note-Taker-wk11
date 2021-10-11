@@ -26,7 +26,7 @@ app.get('/', (req, res) =>
 
 // GET /notes should return the notes.html file
 app.get('/notes', (req, res) =>
-  res.sendFile(path.join(__dirname, '/public/notes'))
+  res.sendFile(path.join(__dirname, '/public/notes.html'))
 );
 
 
