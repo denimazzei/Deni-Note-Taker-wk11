@@ -6,11 +6,11 @@ const path = require('path');
 
 module.exports = app => {
         // GET Route for retrieving all the notes
-    const newNote = app.get('/', (_req, res) => {
-        res.sendFile(path.join(__dirname, '../public/notes.html'));
-    });
+    const newNote = app.get('/', (req, res) => {
+            res.sendFile(path.join(__dirname, '../public/notes.html'));
+        });
 
-    const allNotes = app.get('/', (_req, res) => {
+    const allNotes = app.get('/', (req, res) => {
         res.sendFile(path.join(__dirname, '../public/index.html'));
     });
 

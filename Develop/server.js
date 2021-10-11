@@ -17,7 +17,7 @@ app.use(express.static('public'));
 app.use(express.static(__dirname + '/js'));
 
 //Router files
-
+require('./routes/apiroutes')(app);
 
 // GET Route for homepage
 app.get('/', (req, res) =>
@@ -26,7 +26,7 @@ app.get('/', (req, res) =>
 
 // GET /notes should return the notes.html file
 app.get('/notes', (req, res) =>
-  res.sendFile(path.join(__dirname, '/public/notes.html'))
+  res.sendFile(path.join(__dirname, '/public/notes'))
 );
 
 
