@@ -1,43 +1,40 @@
 const uuid = require('uuid');
+const { readFromFile, readAndAppend } = require('../helpers/fsUtils');
 const fs = require('fs');
 const path = require('path');
+const notes = require('express').Router();
 
 
-module.exports = app => {
+
     // GET Route for retrieving all the notes and sending result to browser
-    app.get('api/notes', (req, res) => {
-        try {
-            notes = res.readFileSync("/db/db.json", "utf8");
-            notes = JSON.parse(notes);
-        }  catch (err) {
-            console.log(err);
-        }  
-        res.json(notes);
+    notes.get('/', (req, res) =>{
+        readFromFile('.db/db.json').then((data)=>
+        res.json(JSON.parse(data)));
+    });
 
-        });
+    notes.post('/', (req, res) => {
+        console.log(req.body);
 
+        const { title, text} = req.body;
+        if (req.body) {
+            const note = {
+                title,
+                text,
+                id: uuid(),
+            };
 
-    //return notes as parsed json
-    app.post('/api/notes', (req, res) => {
-        try {
-            notes = fs.readFileSync("/db/db.json", "utf8");
-            console.log(notes);
-            notes = JSON.parse(notes);
-            req.body.id = notes.length;
-            notes.push(req.body);
-            notes = JSON.stringify(notes);
-            fs.writeFile("/db/db.json", notes, "utf8", (err) => {
-                if (err) throw err;
-            });
-        res.json(JSON.parse(notes));    
-        }  catch (err) {
-        console.log(err);
+            readAndAppend(note, './db/db.json');
+            res.json('Note added!');
+        }else {
+            res.error("error with note!");
         }
     });
 
+
+
     // DELETE Route for removing a note
 
-app.delete("/api/notes/:id", (req, res) => {
+notes.delete("/api/notes/:id", (req, res) => {
     try {
         notes = fs.readFile("/db/db.json", "utf8");
         notes = JSON.parse(notes);
@@ -53,4 +50,5 @@ app.delete("/api/notes/:id", (req, res) => {
         throw err;
     }
 });
-}
+
+module.exports = notes;
